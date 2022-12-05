@@ -23,7 +23,7 @@ struct ContentView: View {
             } else {
                 List(selection: $selectedTargetDates) {
                     ForEach(targetDates, id: \.self) { targetDate in
-                        Text(targetDate.ISO8601Format(.iso8601))
+                        Text(targetDate.beautified)
                     }
                     .onMove(perform: moveItems)
                 }
@@ -54,8 +54,6 @@ struct ContentView: View {
             }
             
             .padding()
-            
-            
             
         }
         .padding()

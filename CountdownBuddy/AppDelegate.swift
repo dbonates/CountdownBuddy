@@ -12,19 +12,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private var popover = NSPopover()
     private var timer: Timer!
-    var selectedDate = Date().plusMinutes(90)
+    var selectedDate: Date! {
+        didSet {
+            UserDefaults.standard.set(selectedDate, forKey: "targetDate")
+        }
+    }
     
         
     func applicationDidFinishLaunching(_ notification: Notification) {
         
 //        UserDefaults.standard.removeObject(forKey: "targetDates")
+//        UserDefaults.standard.removeObject(forKey: "targetDate")
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem?.button?.title = "Time Buddy"
         statusItem?.menu = NSMenu()
         statusItem?.menu?.delegate = self
         
-        
+        loadSelectedDate()
         let contentView = ContentView(selectedDate: selectedDate, appDelegate: self)
         popover.contentSize = CGSize(width: 500, height: 400)
         popover.contentViewController = NSHostingController(rootView: contentView)
@@ -40,7 +45,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         timer.fire()
     }
     
+    func loadSelectedDate() {
+        selectedDate = UserDefaults.standard.object(forKey: "targetDate") as? Date ?? Date().plusMinutes(90)
+    }
+    
     func updateTimer() -> String {
+        
+        guard selectedDate != nil else { return "CountDown Buddy" }
         
         let diff = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: .localDate, to: selectedDate.localized())
 

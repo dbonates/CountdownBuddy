@@ -42,4 +42,13 @@ extension Date {
         }
         return localDate
     }
+    
+    var beautified: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .full
+
+        // dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
+        dateFormatter.dateFormat = "🗓 MM/dd/yyyy ⏱HH:mm:ss"
+        return dateFormatter.string(from: self)
+    }
 }
